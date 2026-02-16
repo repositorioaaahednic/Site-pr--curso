@@ -263,8 +263,187 @@
             50% { transform: translate(-5px, 3px); filter: hue-rotate(90deg); }
             100% { transform: translate(0,0); }
         }
+        .result-info h3{
+    color:#ffe600;
+    text-shadow:0 0 10px rgba(255,230,0,0.7);
+    margin-bottom:10px;
+}
+
+.results-overlay {
+    position: relative;
+    max-width: 900px;
+    margin: auto;
+    text-align: center;
+}
+
+.results-slider {
+    width: 100%;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.results-slider img {
+    max-width: 85%;
+    max-height: 450px;
+    object-fit: contain;
+    border-radius: 12px;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    box-shadow: 0 0 30px rgba(255,0,0,0.15);
+}
+
+.result-info {
+    margin-top: 25px;
+}
+
+.result-info h3 {
+    color: #FFD700;
+    font-size: 24px;
+}
+
+.result-info p {
+    opacity: 0.8;
+    margin-top: 8px;
+}
+
+.arrow {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.6);
+    border: none;
+    color: white;
+    font-size: 30px;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: 0.3s;
+    z-index: 10;
+}
+
+.arrow:hover {
+    background: rgba(255,0,0,0.6);
+}
+
+.arrow.left { left: 0; }
+.arrow.right { right: 0; }
+
+
     </style>
 </head>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const imageElement = document.getElementById("resultImage");
+    const titleElement = document.getElementById("resultTitle");
+    const textElement = document.getElementById("resultText");
+
+    const nextBtn = document.querySelector(".arrow.right");
+    const prevBtn = document.querySelector(".arrow.left");
+
+    // 🔥 CATEGORIAS
+    const categories = [
+        {
+            title: "+3.8M Visualizações",
+            text: "Visualizações orgânicas no TikTok e YouTube através de narrativa imersiva.",
+            images: [
+                "https://github.com/repositorioaaahednic/arquivos/blob/main/Screenshot_22.png?raw=true",
+                "https://github.com/repositorioaaahednic/arquivos/blob/main/Screenshot_25.png?raw=true"
+            ]
+        },
+        {
+            title: "Canal Monetizado ✔",
+            text: "Retenção alta + comunidade ativa aumentam o valor percebido.",
+            images: [
+                "https://github.com/repositorioaaahednic/arquivos/blob/main/Captura%20de%20tela%202025-05-02%20102303.png?raw=true"
+            ]
+        },
+        {
+            title: "Engajamento & Comunidade",
+            text: "Teorias, engajamento da comunidade nos comentários, vídeo alavancando e muito mais!",
+            images: [
+                "https://github.com/repositorioaaahednic/arquivos/blob/main/Screenshot_24.png?raw=true"
+            ]
+        }
+    ];
+
+    let categoryIndex = 0;
+    let imageIndex = 0;
+
+    function updateContent() {
+        const currentCategory = categories[categoryIndex];
+
+        imageElement.style.opacity = 0;
+        imageElement.style.transform = "scale(0.98)";
+
+        setTimeout(() => {
+            imageElement.src = currentCategory.images[imageIndex];
+            titleElement.textContent = currentCategory.title;
+            textElement.textContent = currentCategory.text;
+
+            imageElement.style.opacity = 1;
+            imageElement.style.transform = "scale(1)";
+        }, 200);
+    }
+
+    function nextSlide() {
+        const currentCategory = categories[categoryIndex];
+
+        if (imageIndex < currentCategory.images.length - 1) {
+            imageIndex++;
+        } else {
+            imageIndex = 0;
+            categoryIndex = (categoryIndex + 1) % categories.length;
+        }
+
+        updateContent();
+    }
+
+    function prevSlide() {
+        if (imageIndex > 0) {
+            imageIndex--;
+        } else {
+            categoryIndex = (categoryIndex - 1 + categories.length) % categories.length;
+            imageIndex = categories[categoryIndex].images.length - 1;
+        }
+
+        updateContent();
+    }
+
+    nextBtn.addEventListener("click", nextSlide);
+    prevBtn.addEventListener("click", prevSlide);
+
+    // Swipe Mobile
+    let startX = 0;
+    let isDragging = false;
+
+    imageElement.addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+    });
+
+    imageElement.addEventListener("touchmove", (e) => {
+        if (!isDragging) return;
+        let diff = startX - e.touches[0].clientX;
+
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) nextSlide();
+            else prevSlide();
+            isDragging = false;
+        }
+    });
+
+    imageElement.addEventListener("touchend", () => {
+        isDragging = false;
+    });
+
+    updateContent();
+});
+</script>
+
+
 
 <body>
 
@@ -306,6 +485,35 @@
         </div>
     </div>
 </section>
+
+<section class="section results-section">
+
+    <h2>O Resultado Natural de Um ARG Bem Estruturado 👇</h2>
+    <p class="obs">
+        OBS: O Curso <strong>NÃO</strong> garante resultados financeiros,
+        mas a consequência de um trabalho bem feito pode gerar monetização.
+    </p>
+
+    <div class="results-overlay">
+
+        <button class="arrow left">&#10094;</button>
+
+        <div class="results-slider">
+            <img id="resultImage" src="">
+        </div>
+
+        <button class="arrow right">&#10095;</button>
+
+        <div class="result-info">
+            <h3 id="resultTitle"></h3>
+            <p id="resultText"></p>
+        </div>
+
+    </div>
+
+</section>
+
+
 
 <section class="section">
     <h2>Como Participar da Formação</h2>
@@ -454,6 +662,7 @@ document.addEventListener("mousemove", (e) => {
 
     argIris.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px)) scale(${1 + distance/100})`;
 });
+
 </script>
 
 </body>
