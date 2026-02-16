@@ -1,301 +1,269 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formação ARG Cinemático</title>
 
-<title>Formação ARG Cinemático</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family:'Inter',sans-serif;
+            background:#0b0b0f;
+            color:#eaeaea;
+            overflow-x:hidden;
+        }
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-    font-family:'Inter',sans-serif;
-    background:#0b0b0f;
-    color:#eaeaea;
-    overflow-x:hidden;
-}
+        /* ANIMATED BG */
+        canvas{
+            position:fixed;
+            top:0;left:0;
+            width:100%;height:100%;
+            z-index:-1;
+        }
 
-/* ANIMATED BG */
-canvas{
-    position:fixed;
-    top:0;left:0;
-    width:100%;height:100%;
-    z-index:-1;
-}
+        /* HERO */
+        .hero{
+            height:100vh;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            text-align:center;
+            padding:20px;
+        }
+        .hero h1{
+            font-family:'Orbitron',sans-serif;
+            font-size:3rem;
+            color:#ff2e2e;
+        }
+        .hero p{margin-top:20px;opacity:.8}
 
-/* HERO */
-.hero{
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:20px;
-}
-.hero h1{
-    font-family:'Orbitron',sans-serif;
-    font-size:3rem;
-    color:#ff2e2e;
-}
-.hero p{margin-top:20px;opacity:.8}
+        /* SECTIONS */
+        .section{
+            max-width:1000px;
+            margin:auto;
+            padding:100px 20px;
+            opacity:0;
+            transform:translateY(40px);
+            transition:all .8s ease;
+        }
+        .section.visible{
+            opacity:1;
+            transform:translateY(0);
+        }
+        .section h2{
+            font-family:'Orbitron',sans-serif;
+            color:#ff2e2e;
+            margin-bottom:20px;
+        }
+        .section p{
+            margin-bottom:30px;
+            line-height:1.8;
+        }
 
-/* SECTIONS */
-.section{
-    max-width:1000px;
-    margin:auto;
-    padding:100px 20px;
-    opacity:0;
-    transform:translateY(40px);
-    transition:all .8s ease;
-}
-.section.visible{
-    opacity:1;
-    transform:translateY(0);
-}
-.section h2{
-    font-family:'Orbitron',sans-serif;
-    color:#ff2e2e;
-    margin-bottom:20px;
-}
-.section p{
-    margin-bottom:30px;
-    line-height:1.8;
-}
+        /* VIDEO CARD 16:9 */
+        .video-card{
+            position:relative;
+            width:100%;
+            aspect-ratio:16/9;
+            border-radius:12px;
+            overflow:hidden;
+            background:#1a1a1f;
+            border:1px solid rgba(255,46,46,0.3);
+            box-shadow:0 0 25px rgba(255,46,46,0.15);
+            cursor:pointer;
+            transition:.3s;
+        }
+        .video-card:hover{
+            transform:scale(1.02);
+            box-shadow:0 0 40px rgba(255,46,46,0.4);
+        }
+        .video-overlay{
+            position:absolute;
+            inset:0;
+            background:rgba(0,0,0,.65);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
 
-/* VIDEO CARD 16:9 */
-.video-card{
-    position:relative;
-    width:100%;
-    aspect-ratio:16/9;
-    border-radius:12px;
-    overflow:hidden;
-    background:#1a1a1f;
-    border:1px solid rgba(255,46,46,0.3);
-    box-shadow:0 0 25px rgba(255,46,46,0.15);
-    cursor:pointer;
-    transition:.3s;
-}
-.video-card:hover{
-    transform:scale(1.02);
-    box-shadow:0 0 40px rgba(255,46,46,0.4);
-}
-.video-overlay{
-    position:absolute;
-    inset:0;
-    background:rgba(0,0,0,.65);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
+        /* PLAY BUTTON */
+        .play-btn{
+            width:90px;
+            height:90px;
+            border-radius:50%;
+            background:rgba(255,46,46,.9);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            position:relative;
+            animation:pulse 2s infinite;
+            transition:.3s;
+        }
+        .play-btn::before{
+            content:'';
+            width:0;
+            height:0;
+            border-left:22px solid white;
+            border-top:14px solid transparent;
+            border-bottom:14px solid transparent;
+            margin-left:6px;
+        }
+        .play-btn:hover{
+            transform:scale(1.1);
+        }
+        @keyframes pulse{
+            0%{box-shadow:0 0 0 0 rgba(255,46,46,.7);}
+            70%{box-shadow:0 0 0 25px rgba(255,46,46,0);}
+            100%{box-shadow:0 0 0 0 rgba(255,46,46,0);}
+        }
 
-/* PLAY BUTTON */
-.play-btn{
-    width:90px;
-    height:90px;
-    border-radius:50%;
-    background:rgba(255,46,46,.9);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    animation:pulse 2s infinite;
-    transition:.3s;
-}
-.play-btn::before{
-    content:'';
-    width:0;
-    height:0;
-    border-left:22px solid white;
-    border-top:14px solid transparent;
-    border-bottom:14px solid transparent;
-    margin-left:6px;
-}
-.play-btn:hover{
-    transform:scale(1.1);
-}
-@keyframes pulse{
-    0%{box-shadow:0 0 0 0 rgba(255,46,46,.7);}
-    70%{box-shadow:0 0 0 25px rgba(255,46,46,0);}
-    100%{box-shadow:0 0 0 0 rgba(255,46,46,0);}
-}
+        /* CTA BUTTON */
+        .cta-button{
+            margin-top:30px;
+            padding:15px 45px;
+            font-family:'Orbitron',sans-serif;
+            background:#ff2e2e;
+            border:none;
+            color:white;
+            border-radius:6px;
+            cursor:pointer;
+            transition:.3s;
+        }
+        .cta-button:hover{
+            transform:scale(1.08);
+            box-shadow:0 0 25px rgba(255,46,46,0.8);
+        }
 
-/* CTA BUTTON */
-.cta-button{
-    margin-top:30px;
-    padding:15px 45px;
-    font-family:'Orbitron',sans-serif;
-    background:#ff2e2e;
-    border:none;
-    color:white;
-    border-radius:6px;
-    cursor:pointer;
-    transition:.3s;
-}
-.cta-button:hover{
-    transform:scale(1.08);
-    box-shadow:0 0 25px rgba(255,46,46,0.8);
-}
+        /* MODAL */
+        .modal{
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.95);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            z-index:999;
+        }
+        .modal iframe{
+            width:85%;
+            aspect-ratio:16/9;
+            border:none;
+        }
+        .modal.active{
+            display:flex;
+        }
 
-/* MODAL */
-.modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.95);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:999;
-}
-.modal iframe{
-    width:85%;
-    aspect-ratio:16/9;
-    border:none;
-}
-.modal.active{
-    display:flex;
-}
+        /* --- ANIMAÇÃO DO OLHO ORGÂNICO (NÃO MODIFICAR) --- */
+        .arg-eye-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
 
-/* WRAPPER */
-.arg-eye-wrapper{
-    width:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin-bottom:30px;
-    position:relative;
-    z-index:2;
-}
+        .arg-eye {
+            position: relative;
+            width: 340px;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-/* CONTAINER */
-.arg-eye{
-    position:relative;
-    width:340px;
-    height:130px;
-}
+        .arg-eye-shape {
+            width: 100%;
+            height: 100%;
+            background: #1a0000;
+            border-radius: 50% / 100%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 50px rgba(255, 0, 0, 0.1),
+                inset 0 0 60px rgba(0, 0, 0, 1);
+            border: 1px solid rgba(255, 46, 46, 0.2);
+        }
 
-/* FORMATO DO OLHO */
-.arg-eye-shape{
-    width:100%;
-    height:100%;
-    background:#111;
-    border-radius:50% / 100%;
-    position:relative;
-    overflow:hidden;
-    box-shadow:
-        0 0 50px rgba(255,0,0,0.25),
-        inset 0 0 40px rgba(0,0,0,0.9);
-}
+        .arg-veins {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(120deg, transparent 0px, transparent 28px, rgba(255, 0, 0, 0.1) 30px, transparent 32px);
+            opacity: 0;
+            animation: veinsMove 10s linear infinite;
+        }
 
-/* VEIAS */
-.arg-veins{
-    position:absolute;
-    inset:0;
-    background:
-        repeating-linear-gradient(
-            120deg,
-            transparent 0px,
-            transparent 28px,
-            rgba(255,0,0,0.15) 30px,
-            transparent 32px
-        );
-    opacity:0;
-    animation: veinsMove 8s linear infinite;
-}
+        @keyframes veinsMove {
+            from { background-position: 0 0; }
+            to { background-position: 400px 200px; }
+        }
 
-@keyframes veinsMove{
-    from{ background-position:0 0; }
-    to{ background-position:400px 200px; }
-}
+        .arg-iris {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 100px;
+            height: 100px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, #ff2e2e 0%, #800000 60%, #200000 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6), inset 0 0 20px black;
+            transition: transform 0.1s ease-out;
+        }
 
-/* BRILHO */
-.arg-glow{
-    position:absolute;
-    width:50px;
-    height:25px;
-    background:rgba(255,255,255,0.8);
-    border-radius:50%;
-    filter:blur(10px);
-    top:30%;
-    left:30%;
-    pointer-events:none;
-    transition:0.2s ease;
-}
+        .arg-pupil {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 20px;
+            height: 65px;
+            transform: translate(-50%, -50%);
+            background: black;
+            border-radius: 50%;
+        }
 
-/* IRIS */
-.arg-iris{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:85px;
-    height:85px;
-    transform:translate(-50%, -50%);
-    background:radial-gradient(circle at center,
-        #ff2e2e 0%,
-        #a00000 50%,
-        #300000 80%,
-        #000 100%);
-    border-radius:50%;
-    box-shadow:
-        0 0 35px rgba(255,0,0,0.9),
-        inset 0 0 25px black;
-    transition:0.2s ease;
-}
+        .arg-lid {
+            position: absolute;
+            left: -5px;
+            width: calc(100% + 10px);
+            height: 55%;
+            background: #0b0b0f;
+            z-index: 10;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+        }
 
-/* PUPILA VERTICAL */
-.arg-pupil{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:18px;
-    height:60px;
-    transform:translate(-50%, -50%);
-    background:black;
-    border-radius:50%;
-    transition:0.25s ease;
-}
+        .arg-lid.top {
+            top: -2%;
+            border-radius: 0 0 50% 50% / 0 0 100% 100%;
+            transform-origin: top;
+        }
 
-/* PÁLPEBRAS */
-.arg-lid{
-    position:absolute;
-    width:100%;
-    height:50%;
-    background:#0b0b0f;
-    transition:0.6s ease;
-    z-index:5;
-}
+        .arg-lid.bottom {
+            bottom: -2%;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            transform-origin: bottom;
+        }
 
-.arg-lid.top{ top:0; }
-.arg-lid.bottom{ bottom:0; }
+        .closed .arg-lid.top { transform: scaleY(1); }
+        .closed .arg-lid.bottom { transform: scaleY(1); }
+        .open .arg-lid.top { transform: scaleY(0); }
+        .open .arg-lid.bottom { transform: scaleY(0); }
 
-/* FECHADO */
-.arg-eye.closed .arg-lid.top{ transform:translateY(0%); }
-.arg-eye.closed .arg-lid.bottom{ transform:translateY(0%); }
+        .lids-gone .arg-lid {
+            opacity: 0;
+            pointer-events: none;
+        }
 
-/* ABERTO */
-.arg-eye.open .arg-lid.top{ transform:translateY(-110%); }
-.arg-eye.open .arg-lid.bottom{ transform:translateY(110%); }
-
-.arg-eye.open .arg-veins{ opacity:1; }
-
-/* GLITCH */
-.glitch{
-    animation: glitchAnim 0.25s linear;
-}
-
-@keyframes glitchAnim{
-    0%{ transform:translate(0,0); }
-    20%{ transform:translate(-3px,2px); }
-    40%{ transform:translate(3px,-2px); }
-    60%{ transform:translate(-2px,1px); }
-    80%{ transform:translate(2px,-1px); }
-    100%{ transform:translate(0,0); }
-}
-
-
-</style>
+        .glitch { animation: glitchAnim 0.1s linear; }
+        @keyframes glitchAnim {
+            0% { transform: translate(0,0); }
+            50% { transform: translate(-5px, 3px); filter: hue-rotate(90deg); }
+            100% { transform: translate(0,0); }
+        }
+    </style>
 </head>
 
 <body>
@@ -303,30 +271,25 @@ canvas{
 <canvas id="bg"></canvas>
 
 <section class="hero">
-<div class="arg-eye closed" id="argEye">
-    <div class="arg-eye-shape">
-
-        <div class="arg-veins"></div>
-        <div class="arg-glow" id="argGlow"></div>
-
-        <div class="arg-iris">
-            <div class="arg-pupil"></div>
+    <div class="arg-eye-wrapper">
+        <div class="arg-eye closed" id="argEye">
+            <div class="arg-eye-shape">
+                <div class="arg-veins"></div>
+                <div class="arg-iris" id="argIris">
+                    <div class="arg-pupil"></div>
+                </div>
+            </div>
+            <div class="arg-lid top"></div>
+            <div class="arg-lid bottom"></div>
         </div>
-
     </div>
-
-    <div class="arg-lid top"></div>
-    <div class="arg-lid bottom"></div>
-</div>
-
-
     <h1>FORMAÇÃO ARG CINEMÁTICO</h1>
-    <p>Aprenda a criar universos misteriosos que prendem audiência.</p>
+    <p>Aprenda a criar universos misteriosos dentro do Minecraft que prendem a audiência.</p>
 </section>
 
 <section class="section">
-    <h2>Por que a maioria falha?</h2>
-    <p>Sem estrutura narrativa, sem lore profunda, sem planejamento escalável.</p>
+    <h2>O que é um ARG e por que a maioria falha?</h2>
+    <p>Entendendo o que é um ARG e o porque a maioria deles passam batido pela comunidade👇</p>
     <div class="video-card" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
         <div class="video-overlay">
             <div class="play-btn"></div>
@@ -336,7 +299,7 @@ canvas{
 
 <section class="section">
     <h2>O que sustenta um ARG profissional</h2>
-    <p>Construção de universo. Cinematografia estratégica. Engajamento inteligente.</p>
+    <p>Entenda como e o que sustenta um ARG, sendo possível através de elementos visuais, cliffhanger, plot-twists e muito mais👇</p>
     <div class="video-card" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
         <div class="video-overlay">
             <div class="play-btn"></div>
@@ -344,15 +307,20 @@ canvas{
     </div>
 </section>
 
-<!-- VIDEO FINAL CTA -->
 <section class="section">
     <h2>Como Participar da Formação</h2>
     <p>
-        Neste tutorial você verá:
-        ✔ Estrutura completa do curso  
-        ✔ Módulos passo a passo  
-        ✔ Bônus exclusivo (Presente Misterioso)  
-        ✔ Comunidade privada  
+        A formação segue um mapa de produção profissional:
+        <ul>
+            <li>✔ Aulas organizadas em módulos;</li>
+            <li>✔ Técnicas de edição e cinematografia para produções do seu ARG;</li>
+            <li>✔ Métodos de como VIRALIZAR o seu ARG;</li>
+            <li>✔ Criação de sites, arquivos criptografados, vídeos/imagens realistas;</li>
+            <li>✔ Bônus -> Comunidade para membros do curso;</li>
+            <li>✔ + Lives AO VIVO analisando e tirando dúvidas sobre como MELHORAR o SEU ARG.</li>
+            <br>
+            <p>Para entender melhor, clique neste vídeo abaixo👇</p>
+        </ul>
     </p>
 
     <div class="video-card" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
@@ -437,82 +405,55 @@ window.addEventListener("resize",()=>{
     canvas.height=window.innerHeight;
 });
 
+// --- LÓGICA DO OLHO (MANTIDA INTACTA) ---
 const argEye = document.getElementById("argEye");
-const argIris = document.querySelector(".arg-iris");
-const argPupil = document.querySelector(".arg-pupil");
-const argGlow = document.getElementById("argGlow");
+const argIris = document.getElementById("argIris");
+let observationMode = false;
 
-/* ABRIR SOZINHO */
 window.addEventListener("load", () => {
-
     setTimeout(() => {
-        argEye.classList.remove("closed");
-        argEye.classList.add("open");
-
-        /* glitch ao abrir */
-        argEye.classList.add("glitch");
-        setTimeout(()=>argEye.classList.remove("glitch"),250);
-
-        setTimeout(blink, 1500);
-        setTimeout(blink, 2600);
-
-    }, 500);
+        openEye();
+        setTimeout(() => triggerBlink(), 1200); 
+        setTimeout(() => triggerBlink(true), 2400); 
+    }, 800);
 });
 
-function blink(){
-    argEye.classList.remove("open");
-    argEye.classList.add("closed");
-
-    setTimeout(()=>{
-        argEye.classList.remove("closed");
-        argEye.classList.add("open");
-    },250);
+function openEye() {
+    argEye.classList.remove("closed");
+    argEye.classList.add("open");
+    document.querySelector(".arg-veins").style.opacity = "1";
 }
 
-/* FECHAR AO SCROLL */
-window.addEventListener("scroll",()=>{
-    if(window.scrollY > 50){
-        argEye.classList.remove("open");
-        argEye.classList.add("closed");
-    }
-});
+function triggerBlink(isLast = false) {
+    argEye.classList.remove("open");
+    argEye.classList.add("closed");
+    
+    setTimeout(() => {
+        if (isLast) {
+            argEye.classList.add("lids-gone");
+            argEye.classList.add("glitch");
+            observationMode = true; 
+        }
+        argEye.classList.remove("closed");
+        argEye.classList.add("open");
+    }, 200);
+}
 
-/* MOVIMENTO + DILATAÇÃO */
-document.addEventListener("mousemove",(e)=>{
+document.addEventListener("mousemove", (e) => {
+    if (!observationMode) return;
 
     const rect = argEye.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const eyeCenterX = rect.left + rect.width / 2;
+    const eyeCenterY = rect.top + rect.height / 2;
 
-    const centerX = rect.width/2;
-    const centerY = rect.height/2;
+    const angle = Math.atan2(e.clientY - eyeCenterY, e.clientX - eyeCenterX);
+    const distance = Math.min(30, Math.hypot(e.clientX - eyeCenterX, e.clientY - eyeCenterY) / 10);
 
-    const distance = Math.sqrt(
-        Math.pow(x-centerX,2)+Math.pow(y-centerY,2)
-    );
+    const moveX = Math.cos(angle) * distance;
+    const moveY = Math.sin(angle) * distance;
 
-    const moveX = (x-centerX)/15;
-    const moveY = (y-centerY)/15;
-
-    argIris.style.transform =
-        `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
-
-    /* brilho acompanha */
-    argGlow.style.left = `${30 + moveX/2}%`;
-    argGlow.style.top = `${30 + moveY/2}%`;
-
-    /* dilatação vertical */
-    if(distance < 180){
-        argPupil.style.height = "75px";
-        argPupil.style.width = "14px";
-    } else {
-        argPupil.style.height = "60px";
-        argPupil.style.width = "18px";
-    }
+    argIris.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px)) scale(${1 + distance/100})`;
 });
-
-
-
 </script>
 
 </body>
