@@ -663,7 +663,10 @@ document.addEventListener("mousemove", (e) => {
     argIris.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px)) scale(${1 + distance/100})`;
 });
 
+    document.addEventListener("contextmenu", e => e.preventDefault());
+
 </script>
 
 </body>
 </html>
+
