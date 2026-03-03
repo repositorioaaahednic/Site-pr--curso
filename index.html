@@ -132,20 +132,27 @@
 
         /* CTA BUTTON */
         .cta-button{
-            margin-top:30px;
-            padding:15px 40px;
-            font-family:'Orbitron',sans-serif;
-            background:#ff2e2e;
-            border:none;
-            color:white;
-            border-radius:6px;
-            cursor:pointer;
-            transition:.3s;
-        }
-        .cta-button:hover{
-            transform:scale(1.08);
-            box-shadow:0 0 25px rgba(255,46,46,0.8);
-        }
+    margin-top:30px;
+    padding:15px 40px;
+    font-family:'Orbitron',sans-serif;
+    background:#ff2e2e;
+    border:none;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+    transition:.3s;
+
+    /* ✅ CORREÇÕES IMPORTANTES */
+    letter-spacing:0.5px;
+    word-spacing:0;
+    font-kerning:normal;
+    text-rendering:optimizeLegibility;
+    white-space:nowrap;
+}
+.cta-button:hover{
+    transform:scale(1.08);
+    box-shadow:0 0 25px rgba(255,46,46,0.8);
+}
 
         /* MODAL */
         .modal{
@@ -785,6 +792,7 @@ document.addEventListener("mousemove", (e) => {
 
 </body>
 </html>
+
 
 
 
